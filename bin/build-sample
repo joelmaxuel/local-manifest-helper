@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Simplify steps to start a build
+# Usage:
+# . build-sample devicename [user/userdebug/eng] [dirty]
+
+# Be sure to do this in the root of the source tree!
+
+BUILD_TYPE="user"
+BUILD_DIRTY=0
+
+if [ $# -eq 2 ] ; then
+	if [ "$2" != "dirty" ] ; then
+		BUILD_TYPE=$2
+	else
+		BUILD_DIRTY=1
+	fi
+fi
+
+if [ $# -eq 3 ] ; then
+	if [ "$3" == "dirty" ] ; then
+		BUILD_DIRTY=1
+	fi
+fi
+
+set -e
+
+# Customize the next few lines to that of the project requirements
+# If matching this script with Jenkins, don't need the pipe tee
+source envsetup-sample
+lunch sample_$1-$BUILD_TYPE
+if [ $BUILD_DIRTY -eq 0 ] ; then make clean ; fi
+make otapackage -j$BUILD_THREAD | tee ~/build.log
+
+# Add any post steps as needed
+
+
+set +e

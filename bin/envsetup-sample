@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Shim envsetup with our own steps
+# Usage (one of - "0" is optional - see below):
+# . envsetup-sample
+# . envsetup-sample 0
+# source envsetup-sample 0
+
+# Lazy check if in the source tree (lowest level)
+# Will reuse the source tree variable to keep tabs
+
+if [ "$ANDROID_BUILD_TOP" != "$(pwd)" -a -d $(pwd)/.repo ] ; then 
+	export ANDROID_BUILD_TOP=$(pwd)
+fi
+
+# Even if you were out of tree earlier, check if variable exists
+# Reminder if there are multiple projects, be in the root of intended
+# Or else you may be doing envsetup again for the last project used
+
+if [ -z $ANDROID_BUILD_TOP ] ; then
+
+	echo Appears to not be in the Android Build root directory.  Exiting...
+	exit
+fi
+
+# Set Java indiscriminately - comment out if unnecessary
+source set-java-8
+
+# Set number of CPU threads
+BUILD_THREAD=5
+
+# Set Compiler Cache unless temporarily declined at the command line
+# Feel free to fiddle with the final directory and 50G limit
+# For multiple projects I would suggest separate files or some script-fu
+
+if [ $1 = 0 ] ; then
+	echo Declining ccache.
+	echo
+else
+	export USE_CCACHE=1
+	export CCACHE_DIR=~/.ccache
+	$ANDROID_BUILD_TOP/prebuilts/misc/linux-x86/ccache/ccache -M 50G
+fi
+
+# Feel free to change the OUT dir for unique performance situations
+#export OUT_DIR_COMMON_BASE=/ssd/out
+
+# Finally the ROM's envsetup
+source $ANDROID_BUILD_TOP/build/envsetup.sh
