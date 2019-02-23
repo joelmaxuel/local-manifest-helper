@@ -10,7 +10,7 @@
 # Will reuse the source tree variable to keep tabs
 
 if [ "$ANDROID_BUILD_TOP" != "$(pwd)" -a -d $(pwd)/.repo ] ; then 
-	export ANDROID_BUILD_TOP=$(pwd)
+        export ANDROID_BUILD_TOP=$(pwd)
 fi
 
 # Even if you were out of tree earlier, check if variable exists
@@ -19,23 +19,23 @@ fi
 
 if [ -z $ANDROID_BUILD_TOP ] ; then
 
-	echo Appears to not be in the Android Build root directory.  Exiting...
-	exit
+        echo Appears to not be in the Android Build root directory.  Exiting...
+        exit
 fi
 
 # Set Java indiscriminately - comment out if unnecessary
 source set-java-8
 
 # Set number of CPU threads
-BUILD_THREAD=5
+BUILD_THREAD=16
 
 # Set Compiler Cache unless temporarily declined at the command line
 # Feel free to fiddle with the final directory and 50G limit
 # For multiple projects I would suggest separate files or some script-fu
 
-if [ $1 = 0 ] ; then
-	echo Declining ccache.
-	echo
+if [ "$1" = "0" ] ; then
+        echo Declining ccache.
+        echo
 else
 	export USE_CCACHE=1
 	export CCACHE_DIR=~/.ccache

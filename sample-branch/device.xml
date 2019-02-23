@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+<!-- Sample manifest only for presentation purposes, 
+     not intended to be fully functional in real life. /-->
+
+
+<remote name="myremote"
+fetch="https://github.com/joelmaxuel/BallPeen"
+revision="pie" />
+
+<project name="android_device_lge_hammmerhead" path="device/lge/hammerhead" remote="myremote" />
+
+<project name="proprietary_vendor_lge" path="vendor/lge" remote="myremote" />
+
+<project name="android_kernel_lge_hammerhead" path="kernel/lge/hammerhead" remote="myremote" revision="aosp-9" />
+
+</manifest>

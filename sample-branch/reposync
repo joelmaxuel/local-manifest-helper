@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ "$ANDROID_BUILD_TOP" != "$(pwd)" -a -d $(pwd)/.repo/local_manifests ] ; then 
+	export ANDROID_BUILD_TOP=$(pwd)
+fi
+
+if [ -z $ANDROID_BUILD_TOP ] ; then
+
+	echo Appears to not be in the Android Build root directory.  Exiting...
+	exit
+fi
+
+cd $ANDROID_BUILD_TOP/.repo/local-manifest-helper/
+git pull
+cp *.xml ../local_manifests/
+
+cd $ANDROID_BUILD_TOP/
+repo sync -f --force-sync

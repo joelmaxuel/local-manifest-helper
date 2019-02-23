@@ -10,17 +10,18 @@ BUILD_TYPE="user"
 BUILD_DIRTY=0
 
 if [ $# -eq 2 ] ; then
-	if [ "$2" != "dirty" ] ; then
-		BUILD_TYPE=$2
-	else
-		BUILD_DIRTY=1
-	fi
+        if [ "$2" != "dirty" ] ; then
+                BUILD_TYPE=$2
+        else
+                BUILD_DIRTY=1
+        fi
 fi
 
 if [ $# -eq 3 ] ; then
-	if [ "$3" == "dirty" ] ; then
-		BUILD_DIRTY=1
-	fi
+        BUILD_TYPE=$2
+        if [ "$3" == "dirty" ] ; then
+                BUILD_DIRTY=1
+        fi
 fi
 
 set -e
@@ -30,7 +31,7 @@ set -e
 source envsetup-sample
 lunch sample_$1-$BUILD_TYPE
 if [ $BUILD_DIRTY -eq 0 ] ; then make clean ; fi
-make otapackage -j$BUILD_THREAD | tee ~/build.log
+make otapackage -j$BUILD_THREAD
 
 # Add any post steps as needed
 
